@@ -1,0 +1,16 @@
+{
+  "name": "headless-terminal",
+  "version": "0.0.1",
+  "description": "Headless xterm emulator forked from tty.js's term.js",
+  "main": "headless-terminal.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtinth/headless-terminal.git"
+  },
+  "author": "Thai Pangsakulyanont <org.yi.dttvb@gmail.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
