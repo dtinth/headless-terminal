@@ -44,6 +44,7 @@ Terminal.inherits(HeadlessTerminal, Terminal)
 
 // expose
 HeadlessTerminal.Terminal = Terminal
+HeadlessTerminal.ScreenBuffer = require('./screen-buffer')
 HeadlessTerminal.patcher = require('./buffer-patcher')
 
 HeadlessTerminal.prototype.refresh = function(start, end) {
