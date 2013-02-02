@@ -24,7 +24,7 @@ if (typeof global != 'undefined') {
 }
 
 var Terminal = require('./vendor/term')
-  , ScreenBuffer = require('./screen-buffer')
+  , ScreenBuffer = require('screen-buffer')
 
 Terminal.cursorBlink = false
 
@@ -44,7 +44,7 @@ Terminal.inherits(HeadlessTerminal, Terminal)
 
 // expose
 HeadlessTerminal.Terminal = Terminal
-HeadlessTerminal.ScreenBuffer = require('./screen-buffer')
+HeadlessTerminal.ScreenBuffer = ScreenBuffer
 HeadlessTerminal.patcher = require('./buffer-patcher')
 
 HeadlessTerminal.prototype.refresh = function(start, end) {

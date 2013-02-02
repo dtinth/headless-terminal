@@ -12,5 +12,8 @@
   },
   "author": "Thai Pangsakulyanont <org.yi.dttvb@gmail.com>",
   "license": "MIT",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "screen-buffer": "~0.1.2"
+  }
 }
