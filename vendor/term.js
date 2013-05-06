@@ -2704,11 +2704,6 @@ Terminal.prototype.charAttributes = function(params) {
         if (~(this.curAttr >> 18) & 4) continue;
         this.curAttr = this.curAttr & ~(4 << 18);
       }
-
-      bg = this.curAttr & 0x1ff;
-      fg = (this.curAttr >> 9) & 0x1ff;
-
-      this.curAttr = (this.curAttr & ~0x3ffff) | ((bg << 9) | fg);
     } else if (p === 22) {
       // not bold
       this.curAttr = this.curAttr & ~(1 << 18);
