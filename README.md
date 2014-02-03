@@ -1,4 +1,4 @@
-headless-terminal
+headless-terminal [![...ok travis](https://travis-ci.org/dtinth/headless-terminal.png?branch=master)](https://travis-ci.org/dtinth/headless-terminal)
 =================
 
 A VT100 terminal emulator based on [`vt.js`](https://github.com/spolu/vt.js).
