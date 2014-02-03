@@ -14,7 +14,8 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
-    "screen-buffer": "~0.1.2"
+    "screen-buffer": "~0.1.2",
+    "vt.js": "~0.1.1"
   },
   "devDependencies": {
     "mocha": "~1.17.1"

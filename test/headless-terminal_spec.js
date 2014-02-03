@@ -39,5 +39,9 @@ describe('HeadlessTerminal', function() {
     terminal.write('a\r\n\x1b[38;5;22ma\x1b[48;5;1mb\x1b[mc\r\nd')
     assertBuffer(terminal.displayBuffer, ['a','abc','d'], [[enc()], [enc(null, 22), enc(1, 22), enc()], [enc()]])
   })
+
+  it('should not mock dom anymore!!', function() {
+    assert(undefined === global.document)
+  })
   
 })

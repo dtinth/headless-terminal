@@ -1,32 +1,8 @@
 
-// dummy dom api
-if (typeof global != 'undefined') {
-
-  if (!global.navigator) {
-    global.navigator = { userAgent: '' }
-  }
-
-  if (!global.document) {
-    global.document = {
-      addEventListener: function() { }
-    , createElement: function() {
-        return {
-          addEventListener: function() { }
-        , appendChild: function() { }
-        , removeChild: function() { }
-        , style: {}
-        }
-      }
-    }
-    global.document.body = global.document.createElement('body')
-  }
-
-}
-
-var Terminal = require('./vendor/term')
-  , ScreenBuffer = require('screen-buffer')
-
-Terminal.cursorBlink = false
+var inherits = require('util').inherits
+var vt = require('vt.js')
+var EventEmitter = require('events').EventEmitter
+var ScreenBuffer = require('screen-buffer')
 
 /**
  * A headless terminal is a terminal with an internal screen buffer.
@@ -36,27 +12,36 @@ Terminal.cursorBlink = false
  * with the display buffer as an argument.
  */
 function HeadlessTerminal(cols, rows, refresher) {
+  this.pty = new EventEmitter()
   this.displayBuffer = new ScreenBuffer()
-  Terminal.call(this, cols, rows)
+  this.vt = vt.term({ pty: this.pty, cols: cols, rows: rows })
+  this.vt.on('refresh', function() { this.refresh.apply(this, arguments) }.bind(this))
 }
 
-Terminal.inherits(HeadlessTerminal, Terminal)
+inherits(HeadlessTerminal, EventEmitter)
 
 // expose
-HeadlessTerminal.Terminal = Terminal
 HeadlessTerminal.ScreenBuffer = ScreenBuffer
 HeadlessTerminal.patcher = require('./buffer-patcher')
 
-HeadlessTerminal.prototype.refresh = function(start, end) {
+HeadlessTerminal.prototype.open = function() {
+  // only here for compatibility
+}
+
+HeadlessTerminal.prototype.write = function(data) {
+  this.pty.emit('data', data)
+}
+
+HeadlessTerminal.prototype.refresh = function(dirty, slice, cursor) {
+
+  var start = dirty[0], end = dirty[1]
 
   // update the display buffer
-  for (var y = start; y <= end; y ++) {
-    var row = y + this.ydisp
-      , line = this.lines[row]
-    this.displayBuffer.update(y, line)
+  for (var i = 0; i < slice.length; i ++) {
+    this.displayBuffer.update(start + i, slice[i])
   }
-  this.displayBuffer.cursorX = this.x
-  this.displayBuffer.cursorY = this.y
+  this.displayBuffer.cursorX = cursor.x
+  this.displayBuffer.cursorY = cursor.y
 
   // emit the change event
   this.emit('change', this.displayBuffer, start, end)
