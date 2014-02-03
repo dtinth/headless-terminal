@@ -13,6 +13,7 @@ var ScreenBuffer = require('screen-buffer')
  */
 function HeadlessTerminal(cols, rows, refresher) {
   this.pty = new EventEmitter()
+  this.pty.write = function() { }
   this.displayBuffer = new ScreenBuffer()
   this.vt = vt.term({ pty: this.pty, cols: cols, rows: rows })
   this.vt.on('refresh', function() { this.refresh.apply(this, arguments) }.bind(this))
