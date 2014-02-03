@@ -1,6 +1,7 @@
+headless-terminal
+=================
 
 A VT100 terminal emulator based on [`vt.js`](https://github.com/spolu/vt.js).
-
 
 Usage
 -----
@@ -51,7 +52,6 @@ License
 -------
 
 MIT
-
 
 
 
