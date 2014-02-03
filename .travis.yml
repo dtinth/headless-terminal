@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+- '0.11'
+- '0.10'
+- '0.8'
+deploy:
+  provider: npm
+  email: org.yi.dttvb@gmail.com
+  api_key:
+    secure: TTLSHlDEo5uRMxB417Q+Y1fj+r7DUEUumJH1V+vHIi/5a84vbqTtDs0X+1Y7sd4r7Rlf5Qu/BIwoD3MdSe4wo+d4hZLfnn5cgTkTUTI6g1AG4T26W117f5VvCWRLR2Cr3nlnYCsu2eML7aM2m7n1ocEQosGtIjaW0iWe7SFrMBU=
+  on:
+    tags: true
+    repo: dtinth/headless-terminal
