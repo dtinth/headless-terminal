@@ -4,7 +4,7 @@
   "description": "Headless xterm emulator forked from tty.js's term.js",
   "main": "headless-terminal.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "screen-buffer": "~0.1.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.1"
   }
 }
