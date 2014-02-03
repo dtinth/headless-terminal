@@ -22,8 +22,6 @@ inherits(HeadlessTerminal, EventEmitter)
 
 // expose
 HeadlessTerminal.ScreenBuffer = ScreenBuffer
-HeadlessTerminal.patcher = require('./buffer-patcher')
-
 HeadlessTerminal.prototype.open = function() {
   // only here for compatibility
 }
