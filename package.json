@@ -1,6 +1,6 @@
 {
   "name": "headless-terminal",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Headless xterm emulator forked from tty.js's term.js",
   "main": "headless-terminal.js",
   "scripts": {
