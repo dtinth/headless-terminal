@@ -4,7 +4,7 @@ var vt = require('vt')
   , EventEmitter = require('events').EventEmitter
   , inherits = require('util').inherits
 
-// ## HeadlessTerminal(cols, rows)
+// # new HeadlessTerminal(cols, rows)
 //
 // A headless terminal is a terminal with an internal screen buffer.
 // Don't forget to open() the terminal!
@@ -12,20 +12,45 @@ var vt = require('vt')
 // When the display is changed, the `change` event is emitted
 // with the display buffer as an argument.
 //
+// ## Usage
+//
+// ```javascript
+// var HeadlessTerminal = require('headless-terminal')
+// var terminal = new HeadlessTerminal(80, 25)
+// terminal.write('write some data and ansi code')
+// console.log(terminal.displayBuffer.toString())
+// ```
+//
 function HeadlessTerminal(cols, rows) {
   EventEmitter.call(this)
   this.termBuffer = new vt.TermBuffer(cols, rows)
   this.termBuffer.setMode('crlf', true)
   this.termWriter = new vt.TermWriter(this.termBuffer)
+
+  // ## Attributes
+  //
+  // ### displayBuffer
+  //
+  // The underlying [screen-buffer](http://github.com/dtinth/screen-buffer)
+  //
   this.displayBuffer = new ScreenBuffer()
 }
 
+// ## API
+//
+// HeadlessTerminal inherits EventEmitter.
+//
 inherits(HeadlessTerminal, EventEmitter)
 
 HeadlessTerminal.prototype.open = function() {
   /* nuffink, leaving it here for */
 }
 
+// ### write(whatever)
+//
+// Writes some thing to the terminal.
+// After that, a change event will be emitted.
+//
 HeadlessTerminal.prototype.write = function(whatever) {
   this.termWriter.write(whatever)
   var screen = this.displayBuffer
@@ -38,6 +63,14 @@ HeadlessTerminal.prototype.write = function(whatever) {
   }
   screen.cursorX = buffer.cursor.x
   screen.cursorY = buffer.cursor.y
+
+  // ## Events
+  //
+  // ### 'change' (buffer)
+  //
+  // Emitted when something is written to the terminal.
+  // The first argument will be the underlying screen-buffer.
+  //
   this.emit('change', this.displayBuffer, 0, height - 1)
 }
 
@@ -62,9 +95,18 @@ HeadlessTerminal.prototype._convertAttribute = function(attr) {
   return (inverse << 20) | (underline << 19) | (bold << 18) | (fg << 9) | bg
 }
 
-// expose
+// ## Static Members
+//
+// ### HeadlessTerminal.ScreenBuffer
+//
+// The ScreenBuffer class.
+//
 HeadlessTerminal.ScreenBuffer = ScreenBuffer
-HeadlessTerminal.patcher = require('./buffer-patcher')
-
 module.exports = HeadlessTerminal
+
+// ## License
+//
+// MIT
+//
+
 

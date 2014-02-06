@@ -1,16 +1,36 @@
+# new HeadlessTerminal(cols, rows)
 
-A headless terminal emulator forked from tty.js. For use in ttycast 0.1.x.
+A headless terminal is a terminal with an internal screen buffer.
+Don't forget to open() the terminal!
 
-License is MIT.
+When the display is changed, the `change` event is emitted
+with the display buffer as an argument.
 
-Usage:
+## Usage
 
-    var HeadlessTerminal = require('headless-terminal')
-    var terminal = new HeadlessTerminal(80, 25)
+```javascript
+var HeadlessTerminal = require('headless-terminal')
+var terminal = new HeadlessTerminal(80, 25)
+terminal.write('write some data and ansi code')
+console.log(terminal.displayBuffer.toString())
+```
 
-    terminal.open()
+## API
 
-    terminal.write('write some data and ansi code')
-    console.log(terminal.displayBuffer.toString())
+HeadlessTerminal inherits EventEmitter.
 
+### write(whatever)
+
+Writes some thing to the terminal.
+After that, a change event will be emitted.
+
+## Static Members
+
+### HeadlessTerminal.ScreenBuffer
+
+The ScreenBuffer class.
+
+## License
+
+MIT
 
