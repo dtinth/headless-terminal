@@ -1,67 +1,70 @@
 
-// dummy dom api
-if (typeof global != 'undefined') {
-
-  if (!global.navigator) {
-    global.navigator = { userAgent: '' }
-  }
-
-  if (!global.document) {
-    global.document = {
-      addEventListener: function() { }
-    , createElement: function() {
-        return {
-          addEventListener: function() { }
-        , appendChild: function() { }
-        , removeChild: function() { }
-        , style: {}
-        }
-      }
-    }
-    global.document.body = global.document.createElement('body')
-  }
-
-}
-
-var Terminal = require('./vendor/term')
+var vt = require('vt')
   , ScreenBuffer = require('screen-buffer')
+  , EventEmitter = require('events').EventEmitter
+  , inherits = require('util').inherits
 
-Terminal.cursorBlink = false
-
-/**
- * A headless terminal is a terminal with an internal screen buffer.
- * Don't forget to open() the terminal!
- * 
- * When the display is changed, the `change` event is emitted
- * with the display buffer as an argument.
- */
-function HeadlessTerminal(cols, rows, refresher) {
+// ## HeadlessTerminal(cols, rows)
+//
+// A headless terminal is a terminal with an internal screen buffer.
+// Don't forget to open() the terminal!
+// 
+// When the display is changed, the `change` event is emitted
+// with the display buffer as an argument.
+//
+function HeadlessTerminal(cols, rows) {
+  EventEmitter.call(this)
+  this.termBuffer = new vt.TermBuffer(cols, rows)
+  this.termBuffer.setMode('crlf', true)
+  this.termWriter = new vt.TermWriter(this.termBuffer)
   this.displayBuffer = new ScreenBuffer()
-  Terminal.call(this, cols, rows)
 }
 
-Terminal.inherits(HeadlessTerminal, Terminal)
+inherits(HeadlessTerminal, EventEmitter)
+
+HeadlessTerminal.prototype.open = function() {
+  /* nuffink, leaving it here for */
+}
+
+HeadlessTerminal.prototype.write = function(whatever) {
+  this.termWriter.write(whatever)
+  var screen = this.displayBuffer
+    , buffer = this.termBuffer
+    , height = buffer.height
+  screen.setRows(height)
+  for (var i = 0; i < height; i ++) {
+    var line = buffer.getLine(i)
+    screen.update(i, this._convertLine(line))
+  }
+  screen.cursorX = buffer.cursor.x
+  screen.cursorY = buffer.cursor.y
+  this.emit('change', this.displayBuffer, 0, height - 1)
+}
+
+HeadlessTerminal.prototype._convertLine = function(line) {
+  var chars = [ ]
+    , str = line.str
+    , attr = line.attr
+    , length = str.length
+  chars.length = length
+  for (var i = 0; i < length; i ++) {
+    chars[i] = [this._convertAttribute(attr[i]), str.charAt(i)]
+  }
+  return chars
+}
+
+HeadlessTerminal.prototype._convertAttribute = function(attr) {
+  var fg = attr.fg == null ? 257 : attr.fg
+    , bg = attr.bg == null ? 256 : attr.bg
+    , inverse = attr.inverse ? 1 : 0
+    , underline = attr.underline ? 1 : 0
+    , bold = attr.bold ? 1 : 0
+  return (inverse << 20) | (underline << 19) | (bold << 18) | (fg << 9) | bg
+}
 
 // expose
-HeadlessTerminal.Terminal = Terminal
 HeadlessTerminal.ScreenBuffer = ScreenBuffer
 HeadlessTerminal.patcher = require('./buffer-patcher')
-
-HeadlessTerminal.prototype.refresh = function(start, end) {
-
-  // update the display buffer
-  for (var y = start; y <= end; y ++) {
-    var row = y + this.ydisp
-      , line = this.lines[row]
-    this.displayBuffer.update(y, line)
-  }
-  this.displayBuffer.cursorX = this.x
-  this.displayBuffer.cursorY = this.y
-
-  // emit the change event
-  this.emit('change', this.displayBuffer, start, end)
-
-}
 
 module.exports = HeadlessTerminal
 

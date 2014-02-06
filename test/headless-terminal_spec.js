@@ -30,6 +30,10 @@ function enc(bg, fg) {
 
 describe('HeadlessTerminal', function() {
 
+  it('should not mock dom any more', function() {
+    assert(global.document === undefined)
+  })
+
   /**
    * This is a simple acceptance test...
    */
