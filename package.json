@@ -1,6 +1,6 @@
 {
   "name": "headless-terminal",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Headless xterm emulator using vt (terminal.js).",
   "main": "headless-terminal.js",
   "scripts": {
