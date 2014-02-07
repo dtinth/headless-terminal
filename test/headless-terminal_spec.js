@@ -38,10 +38,10 @@ describe('HeadlessTerminal', function() {
    * This is a simple acceptance test...
    */
   it('should write terminal contents into the buffer', function() {
-    var terminal = new HeadlessTerminal(3, 3)
+    var terminal = new HeadlessTerminal(4, 3)
     terminal.open()
-    terminal.write('a\r\n\x1b[38;5;22ma\x1b[48;5;1mb\x1b[mc\r\nd')
-    assertBuffer(terminal.displayBuffer, ['a','abc','d'], [[enc()], [enc(null, 22), enc(1, 22), enc()], [enc()]])
+    terminal.write('a\r\n\x1b[38;5;22ma\x1b[48;5;1mbn\x1b[mc\r\nd')
+    assertBuffer(terminal.displayBuffer, ['a','abnc','d'], [[enc()], [enc(null, 22), enc(1, 22), enc(1, 22), enc()], [enc()]])
   })
   
 })

@@ -7,10 +7,12 @@ var vt = require('vt')
 // # new HeadlessTerminal(cols, rows)
 //
 // A headless terminal is a terminal with an internal screen buffer.
-// Don't forget to open() the terminal!
 // 
 // When the display is changed, the `change` event is emitted
 // with the display buffer as an argument.
+//
+// __Note:__ Since v0.3 the API has been _completely changed_.
+//
 //
 // ## Usage
 //
@@ -75,24 +77,35 @@ HeadlessTerminal.prototype.write = function(whatever) {
 }
 
 HeadlessTerminal.prototype._convertLine = function(line) {
+
   var chars = [ ]
-    , str = line.str
-    , attr = line.attr
-    , length = str.length
+    , str = pad(line.str, this.termBuffer.width)
+    , attr = null
+
+  var length = str.length
   chars.length = length
   for (var i = 0; i < length; i ++) {
-    chars[i] = [this._convertAttribute(attr[i]), str.charAt(i)]
+    if (line.attr[i]) attr = line.attr[i]
+    chars[i] = [this._convertAttribute(attr), str.charAt(i)]
   }
+
   return chars
+
 }
 
 HeadlessTerminal.prototype._convertAttribute = function(attr) {
-  var fg = attr.fg == null ? 257 : attr.fg
-    , bg = attr.bg == null ? 256 : attr.bg
-    , inverse = attr.inverse ? 1 : 0
-    , underline = attr.underline ? 1 : 0
-    , bold = attr.bold ? 1 : 0
+  var fg = attr && attr.fg != null ? attr.fg : 257
+    , bg = attr && attr.bg != null ? attr.bg : 256
+    , inverse = attr && attr.inverse ? 1 : 0
+    , underline = attr && attr.underline ? 1 : 0
+    , bold = attr && attr.bold ? 1 : 0
   return (inverse << 20) | (underline << 19) | (bold << 18) | (fg << 9) | bg
+}
+
+function pad(str, width) {
+  if (str.length >= width) return str
+  var howMany = width - str.length
+  return str + new Array(howMany + 1).join(' ')
 }
 
 // ## Static Members

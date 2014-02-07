@@ -1,7 +1,7 @@
 {
   "name": "headless-terminal",
   "version": "0.3.0",
-  "description": "Headless xterm emulator forked from tty.js's term.js",
+  "description": "Headless xterm emulator using vt (terminal.js).",
   "main": "headless-terminal.js",
   "scripts": {
     "test": "mocha"
@@ -14,7 +14,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
-    "screen-buffer": "~0.3.0",
+    "screen-buffer": "~0.3.3",
     "vt": "~0.1.1"
   },
   "devDependencies": {
