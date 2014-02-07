@@ -55,6 +55,20 @@ HeadlessTerminal.prototype.open = function() {
 //
 HeadlessTerminal.prototype.write = function(whatever) {
   this.termWriter.write(whatever)
+  this._check()
+}
+
+// ### resize(cols, rows)
+//
+// Resizes the size of the terminal.
+// After that, a change event will be emitted.
+//
+HeadlessTerminal.prototype.resize = function(cols, rows) {
+  this.termBuffer.resize(cols, rows)
+  this._check()
+}
+
+HeadlessTerminal.prototype._check = function() {
   var screen = this.displayBuffer
     , buffer = this.termBuffer
     , height = buffer.height

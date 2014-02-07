@@ -32,6 +32,11 @@ HeadlessTerminal inherits EventEmitter.
 Writes some thing to the terminal.
 After that, a change event will be emitted.
 
+### resize(cols, rows)
+
+Resizes the size of the terminal.
+After that, a change event will be emitted.
+
 ## Events
 
 ### 'change' (buffer)

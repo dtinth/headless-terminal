@@ -43,5 +43,13 @@ describe('HeadlessTerminal', function() {
     terminal.write('a\r\n\x1b[38;5;22ma\x1b[48;5;1mbn\x1b[mc\r\nd')
     assertBuffer(terminal.displayBuffer, ['a','abnc','d'], [[enc()], [enc(null, 22), enc(1, 22), enc(1, 22), enc()], [enc()]])
   })
+
+  it('should allow resizing', function() {
+    var terminal = new HeadlessTerminal(4, 3)
+    terminal.open()
+    terminal.write('a\r\n\x1b[38;5;22ma\x1b[48;5;1mbn\x1b[mc\r\nd')
+    terminal.resize(4, 2)
+    assertBuffer(terminal.displayBuffer, ['abnc','d'], [[enc(null, 22), enc(1, 22), enc(1, 22), enc()], [enc()]])
+  })
   
 })
