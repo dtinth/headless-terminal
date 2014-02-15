@@ -23,7 +23,7 @@ var vt = require('vt')
 // console.log(terminal.displayBuffer.toString())
 // ```
 //
-function HeadlessTerminal(cols, rows) {
+function HeadlessTerminal(cols, rows, ScreenBufferConstructor) {
   EventEmitter.call(this)
   this.termBuffer = new vt.TermBuffer(cols, rows)
   this.termBuffer.setMode('crlf', true)
@@ -35,7 +35,8 @@ function HeadlessTerminal(cols, rows) {
   //
   // The underlying [screen-buffer](http://github.com/dtinth/screen-buffer)
   //
-  this.displayBuffer = new ScreenBuffer()
+  if (!ScreenBufferConstructor) ScreenBufferConstructor = ScreenBuffer
+  this.displayBuffer = new ScreenBufferConstructor()
 }
 
 // ## API
@@ -122,13 +123,6 @@ function pad(str, width) {
   return str + new Array(howMany + 1).join(' ')
 }
 
-// ## Static Members
-//
-// ### HeadlessTerminal.ScreenBuffer
-//
-// The ScreenBuffer class.
-//
-HeadlessTerminal.ScreenBuffer = ScreenBuffer
 module.exports = HeadlessTerminal
 
 // ## License
